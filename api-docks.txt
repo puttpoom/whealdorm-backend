@@ -1,0 +1,53 @@
+//------------------------------//
+//          Register            //
+//------------------------------//
+POST        /auth/register      create new user 
+REQUEST.BODY      
+    {   
+        email,      string      
+        password,   string      
+        firstName,  string      
+        LastName    string
+    }
+LOGIC
+    - check already in used email ?
+    - hash password
+    - create payload
+    - insert payload into acessToken
+RESSPONSE
+201 {req.body}
+400 {}
+500
+
+//------------------------------//
+//          Login               //
+//------------------------------//
+POST        /auth/Login     Login
+
+LOGIC
+    - check HEADER `BEARER acessToken` in localStorage
+    - create acessToken
+    - check user in DB ?
+    - check/de-hash password in DB ?
+RESSPONSE
+201 {req.body}
+400 {}
+500
+
+//------------------------------//
+//     Create Vacant Room       //
+//------------------------------//
+POST        /dorm       create a post
+HEADER
+    AUTHORIZATION   Bearer [JWT]    check role, get dormId
+REQUEST.BODY
+    {
+        
+    }
+
+LOGIC
+    - get acessToken in localStorage
+    - verify acessToken get payload(dormId)
+
+    
+

@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DORM
+  USER
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  firstName    String        @map("first_name")
+  lastName     String        @map("last_name")
+  profileImage String?       @map("profile_image")
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  role         Role          @default(USER)
+  apointments  Appointment[]
+  dorms        Dorm[]
+
+  @@map("users")
+}
+
+enum AppointmentStatus {
+  PEDNING
+  CONFIRM
+  CANCLED
+  DONE
+}
+
+model Appointment {
+  id                Int               @id @default(autoincrement())
+  fullName          String            @map("full_name")
+  phone             String
+  title             String
+  appointedDate     String            @map("appointed_date")
+  appointedTime     String            @map("appointed_time")
+  createdAt         DateTime          @default(now())
+  appointmentStatus AppointmentStatus @default(PEDNING) @map("appointment_status")
+  User              User?             @relation(fields: [userId], references: [id])
+  userId            Int               @map("user_id")
+  Room              Room?             @relation(fields: [roomId], references: [id])
+  roomId            Int               @map("room_id")
+
+  @@map("appointments")
+}
+
+enum isVerify {
+  PEDNING
+  VERIFY
+  BANDED
+}
+
+model Dorm {
+  id                 Int             @id @default(autoincrement())
+  User               User?           @relation(fields: [userId], references: [id])
+  userId             Int             @map("user_id")
+  phone              String
+  dormImages         String          @map("dorm_images")
+  location           String?
+  distance           String
+  electricalUnit     Decimal         @map("electrical_unit") @db.Decimal(2, 2)
+  waterUnit          Decimal         @map("water_unit") @db.Decimal(2, 2)
+  totalAvialableRoom Int             @default(0)
+  room               Room[]
+  DormFacilities     DormFacilities?
+
+  @@map("dorms")
+}
+
+model Room {
+  id             Int             @id @default(autoincrement())
+  appointments   Appointment[]
+  Dorm           Dorm?           @relation(fields: [dormId], references: [id])
+  dormId         Int             @map("dorm_id")
+  title          String
+  info           String?
+  roomImages     String?         @map("room_images")
+  price          Decimal         @db.Decimal(10, 2)
+  size           String?
+  roomStatus     RoomStatus      @default(VACANT) @map("room_status")
+  roomFacilities RoomFacilities?
+
+  @@map("rooms")
+}
+
+enum RoomStatus {
+  VACANT
+  RENTED
+}
+
+model RoomFacilities {
+  id            Int     @id @default(autoincrement())
+  room          Room    @relation(fields: [roomId], references: [id])
+  roomId        Int     @unique @map("room_id")
+  isAir         isAir   @default(FAN)
+  isWaterHeater Boolean @default(false)
+  isFurniture   Boolean @default(false)
+  isTable       Boolean @default(false)
+  isSink        Boolean @default(false)
+
+  @@map("room_facilities")
+}
+
+enum isAir {
+  FAN
+  AIRCONDITION
+}
+
+model DormFacilities {
+  id               Int     @id @default(autoincrement())
+  isParking        Boolean @default(false) @map("is_parking")
+  isKeyCard        Boolean @default(false) @map("is_keycard")
+  isLift           Boolean @default(false) @map("is_lift")
+  isInternet       Boolean @default(false) @map("is_internet")
+  isCCTV           Boolean @default(false) @map("is_ccty")
+  isLundary        Boolean @default(false) @map("is_lundary")
+  isWaterDispenser Boolean @default(false) @map("is_water_dispenser")
+  isMart           Boolean @default(false) @map("is_mart")
+
+  dorm   Dorm @relation(fields: [dormId], references: [id])
+  dormId Int  @unique @map("dorm_id")
+
+  @@map("dorm_facilities")
+}
