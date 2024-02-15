@@ -7,11 +7,11 @@ const notFound = require("./middlewares/notFound");
 
 const PORT = process.env.PORT || 8000;
 
-//router
-const authRoute = require("./routers/auth-route");
-
 app.use(cors());
 app.use(express.json());
+
+//router
+const authRoute = require("./routers/auth-route");
 
 //config rote
 // app.use("/");

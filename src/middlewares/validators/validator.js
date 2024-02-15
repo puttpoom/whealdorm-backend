@@ -1,6 +1,7 @@
 const validate = (schema) => (req, res, next) => {
   const { value, error } = schema.validate(req.body);
   if (error) {
+    // console.log(error);
     throw error;
   }
   req.body = value;

@@ -12,14 +12,10 @@ const registerSchema = Joi.object({
     "any.required": "last name is required",
   }),
 
-  email: Joi.string()
-    .email({ tlds: false })
-    .required()
-    .messages({
-      "alternatives.match": "invalid email address or mobile number",
-      "any.required": "email address or mobile number is required",
-    })
-    .strip(),
+  email: Joi.string().email({ tlds: false }).required().messages({
+    "alternatives.match": "invalid email address or mobile number",
+    "any.required": "email address or mobile number is required",
+  }),
 
   password: Joi.string()
     .pattern(/^[a-zA-Z0-9]{6,}$/)
@@ -31,18 +27,19 @@ const registerSchema = Joi.object({
       "any.required": "password is required",
     }),
 
-  email: Joi.forbidden().when("emailOrMobile", {
-    is: Joi.string().email({ tlds: false }),
-    then: Joi.string().default(Joi.ref("emailOrMobile")),
-  }),
-  mobile: Joi.forbidden().when("emailOrMobile", {
-    is: Joi.string().pattern(/^[0-9]{10}$/),
-    then: Joi.string().default(Joi.ref("emailOrMobile")),
-  }),
+  // email: Joi.forbidden().when("email", {
+  //   is: Joi.string().email({ tlds: false }),
+  //   then: Joi.string().default(Joi.ref("email")),
+  // }),
+
+  // mobile: Joi.forbidden().when("emailOrMobile", {
+  //   is: Joi.string().pattern(/^[0-9]{10}$/),
+  //   then: Joi.string().default(Joi.ref("emailOrMobile")),
+  // }),
 });
 
 const loginSchema = Joi.object({
-  emailOrMobile: Joi.string().required().messages({
+  email: Joi.string().required().messages({
     "string.empty": "email or mobile is required",
     "any.required": "email or mobile is required",
   }),

@@ -4,24 +4,25 @@ const createError = require("../untils/create-error");
 const catchError = require("../untils/catch-error");
 const jwtService = require("../services/jwt-service");
 
-exports.createUser = catchError(async (req, res, next) => {
+exports.register = catchError(async (req, res, next) => {
   const existUser = await userService.findUserByEmail(req.body.email);
-  console.log(existUser);
+  // console.log(existUser);
 
   if (existUser) {
+    console.log(existUser);
     createError("Error naja Email already in used", 400);
   }
 
   req.body.password = await hashService.hash(req.body.password);
   const newUser = await userService.createUser(req.body);
-  const payload = { userId: newUser.id };
+  const payload = { userId: newUser.id, roleUser: newUser.role };
 
   const accessToken = jwtService.sign(payload);
 
   console.log(accessToken);
   delete newUser.password;
 
-  res.status(200).json({ msg: req.body });
+  res.status(201).json({ accessToken, newUser });
 });
 
 exports.login = catchError(async (req, res, next) => {
