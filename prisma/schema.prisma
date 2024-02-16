@@ -25,7 +25,7 @@ model User {
   profileImage String?       @map("profile_image")
   createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
-  role         Role          @default(USER)
+  role         Role?
   apointments  Appointment[]
   dorms        Dorm[]
 
@@ -63,18 +63,18 @@ enum isVerify {
 }
 
 model Dorm {
-  id                 Int             @id @default(autoincrement())
-  User               User?           @relation(fields: [userId], references: [id])
-  userId             Int             @map("user_id")
-  phone              String
-  dormImages         String          @map("dorm_images")
-  location           String?
-  distance           String
-  electricalUnit     Decimal         @map("electrical_unit") @db.Decimal(2, 2)
-  waterUnit          Decimal         @map("water_unit") @db.Decimal(2, 2)
-  totalAvialableRoom Int             @default(0)
-  room               Room[]
-  DormFacilities     DormFacilities?
+  id              Int             @id @default(autoincrement())
+  User            User?           @relation(fields: [userId], references: [id])
+  userId          Int             @map("user_id")
+  phone           String
+  dormImages      String?         @map("dorm_images")
+  location        String?
+  distance        String
+  electricalUnit  Decimal         @map("electrical_unit") @db.Decimal(4, 2)
+  waterUnit       Decimal         @map("water_unit") @db.Decimal(4, 2)
+  totalVacantRoom Int             @default(0) @map("total_vacant_room")
+  room            Room[]
+  DormFacilities  DormFacilities?
 
   @@map("dorms")
 }

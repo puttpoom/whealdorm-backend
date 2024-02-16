@@ -12,10 +12,12 @@ app.use(express.json());
 
 //router
 const authRoute = require("./routers/auth-route");
+const dormRoute = require("./routers/dorm-route");
 
 //config rote
 // app.use("/");
 app.use("/auth", authRoute);
+app.use("/dorm", dormRoute);
 
 app.use(notFound);
 app.use(error);

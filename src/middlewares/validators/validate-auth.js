@@ -27,6 +27,11 @@ const registerSchema = Joi.object({
       "any.required": "password is required",
     }),
 
+  role: Joi.string()
+    .valid("USER", "DORM")
+    .required()
+    .messages({ "string.empty": "role is required" }),
+
   // email: Joi.forbidden().when("email", {
   //   is: Joi.string().email({ tlds: false }),
   //   then: Joi.string().default(Joi.ref("email")),
