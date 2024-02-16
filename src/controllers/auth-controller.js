@@ -1,7 +1,7 @@
 const userService = require("../services/user-service");
 const hashService = require("../services/hash-service");
-const createError = require("../untils/create-error");
-const catchError = require("../untils/catch-error");
+const createError = require("../untills/create-error");
+const catchError = require("../untills/catch-error");
 const jwtService = require("../services/jwt-service");
 
 exports.register = catchError(async (req, res, next) => {
@@ -10,12 +10,12 @@ exports.register = catchError(async (req, res, next) => {
 
   if (existUser) {
     console.log(existUser);
-    createError("Error naja Email already in used", 400);
+    createError("EMAIL_IN_USE", 400);
   }
 
   req.body.password = await hashService.hash(req.body.password);
   const newUser = await userService.createUser(req.body);
-  const payload = { userId: newUser.id, roleUser: newUser.role };
+  const payload = { userId: newUser.id, role: newUser.role };
 
   const accessToken = jwtService.sign(payload);
 
@@ -26,16 +26,26 @@ exports.register = catchError(async (req, res, next) => {
 });
 
 exports.login = catchError(async (req, res, next) => {
-  const existUser = await userService.findUserByEmail(req.body.email);
+  const existsUser = await userService.findUserByEmail(req.body.email);
 
-  if (!existUser) {
+  if (!existsUser) {
     createError("invalid Email", 400);
   }
 
-  const verifyPassword = await hashService.compare(
+  const isMatch = await hashService.compare(
     req.body.password,
-    existUser.password
-  ); //* return boolean
+    existsUser.password
+  );
 
-  res.status(200).json({ msg: "login successfully" });
+  if (!isMatch) {
+    createError("Invalid credentials naja(Password)", 400);
+  }
+
+  const payload = { userId: existsUser.id, roleUser: existsUser.role };
+  const accessToken = jwtService.sign(payload);
+  delete existsUser.password;
+
+  res.status(200).json({ accessToken, user: existsUser });
 });
+
+exports.getMe = (req, res, next) => res.status(200).json({ user: req.user });
