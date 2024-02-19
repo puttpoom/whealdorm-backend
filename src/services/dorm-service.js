@@ -5,6 +5,7 @@ exports.registerDorm = (data) => prisma.dorm.create({ data });
 exports.findDormUserByUserId = (userId) =>
   prisma.dorm.findFirst({
     where: { userId },
+    include: { room: true },
   });
 
 exports.createRoom = (data, roomFacilities) =>

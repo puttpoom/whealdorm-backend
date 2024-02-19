@@ -5,6 +5,8 @@ const {
   updateTotalRoom,
   getAllVacantDorm,
 } = require("../services/dorm-service");
+
+const { getAllVacantRoomByDormID } = require("../services/room-service");
 const catchError = require("../untills/catch-error");
 const createError = require("../untills/create-error");
 
@@ -42,4 +44,24 @@ exports.createRoom = catchError(async (req, res, next) => {
 exports.getAllVacantDorm = catchError(async (req, res, next) => {
   const result = await getAllVacantDorm();
   res.status(200).json(result);
+});
+
+exports.checkExitsDorm = catchError(async (req, res, next) => {
+  const exitsDorm = await findDormUserByUserId(+req.params.targetDormId);
+  if (!exitsDorm) {
+    createError("dorm was not found", 404);
+  }
+
+  delete exitsDorm.password;
+  req.targetDormId = exitsDorm;
+  next();
+});
+
+exports.getAllVacantRoomByDormId = catchError(async (req, res, next) => {
+  const vacantRoomByDormId = await getAllVacantRoomByDormID(
+    +req.targetDormId.id
+  );
+  if (!vacantRoomByDormId)
+    return createError("Internal ServerError (NO VACANT ROOM)", 500);
+  res.status(200).json(vacantRoomByDormId);
 });
