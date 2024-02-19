@@ -38,7 +38,7 @@ exports.login = catchError(async (req, res, next) => {
   );
 
   if (!isMatch) {
-    createError("Invalid credentials naja(Password)", 400);
+    createError("Invalid credentials", 400);
   }
 
   const payload = { userId: existsUser.id, roleUser: existsUser.role };

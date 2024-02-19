@@ -17,17 +17,18 @@ enum Role {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
   password     String
-  firstName    String        @map("first_name")
-  lastName     String        @map("last_name")
-  profileImage String?       @map("profile_image")
-  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
-  role         Role?
-  apointments  Appointment[]
-  dorms        Dorm[]
+  firstName    String   @map("first_name")
+  lastName     String   @map("last_name")
+  profileImage String?  @map("profile_image")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  role         Role
+
+  apointments Appointment[]
+  dorms       Dorm?
 
   @@map("users")
 }
@@ -48,10 +49,11 @@ model Appointment {
   appointedTime     String            @map("appointed_time")
   createdAt         DateTime          @default(now())
   appointmentStatus AppointmentStatus @default(PEDNING) @map("appointment_status")
-  User              User?             @relation(fields: [userId], references: [id])
-  userId            Int               @map("user_id")
-  Room              Room?             @relation(fields: [roomId], references: [id])
-  roomId            Int               @map("room_id")
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int  @map("user_id")
+  Room   Room @relation(fields: [roomId], references: [id])
+  roomId Int  @map("room_id")
 
   @@map("appointments")
 }
@@ -63,34 +65,48 @@ enum isVerify {
 }
 
 model Dorm {
-  id              Int             @id @default(autoincrement())
-  User            User?           @relation(fields: [userId], references: [id])
-  userId          Int             @map("user_id")
+  id              Int     @id @default(autoincrement())
+  dormName        String  @map("dorm_name")
   phone           String
-  dormImages      String?         @map("dorm_images")
+  dormImages      String? @map("dorm_images")
+  latlong         String?
   location        String?
   distance        String
-  electricalUnit  Decimal         @map("electrical_unit") @db.Decimal(4, 2)
-  waterUnit       Decimal         @map("water_unit") @db.Decimal(4, 2)
-  totalVacantRoom Int             @default(0) @map("total_vacant_room")
-  room            Room[]
-  DormFacilities  DormFacilities?
+  electricalUnit  Decimal @map("electrical_unit") @db.Decimal(4, 2)
+  waterUnit       Decimal @map("water_unit") @db.Decimal(4, 2)
+  totalVacantRoom Int     @default(0) @map("total_vacant_room")
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique @map("user_id")
+
+  // 1-M
+  room           Room[]
+  //1-1
+  DormFacilities DormFacilities?
 
   @@map("dorms")
 }
 
 model Room {
-  id             Int             @id @default(autoincrement())
-  appointments   Appointment[]
-  Dorm           Dorm?           @relation(fields: [dormId], references: [id])
-  dormId         Int             @map("dorm_id")
-  title          String
-  info           String?
-  roomImages     String?         @map("room_images")
-  price          Decimal         @db.Decimal(10, 2)
-  size           String?
-  roomStatus     RoomStatus      @default(VACANT) @map("room_status")
+  id         Int        @id @default(autoincrement())
+  title      String
+  info       String?
+  roomImages String?    @map("room_images") @db.VarChar(10000)
+  price      Decimal    @db.Decimal(10, 2)
+  size       Int?
+  roomStatus RoomStatus @default(VACANT) @map("room_status")
+
+  // Dorm         Dorm?         @relation(fields: [dormId], references: [id])
+  // dormId       Int           @unique @map("dorm_id")
+  appointments Appointment[]
+
+  // 1-1
   roomFacilities RoomFacilities?
+
+  // M-1
+  Dorm      Dorm     @relation(fields: [dormId], references: [id])
+  dormId    Int      @map("dorm_id")
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("rooms")
 }
@@ -102,20 +118,24 @@ enum RoomStatus {
 
 model RoomFacilities {
   id            Int     @id @default(autoincrement())
-  room          Room    @relation(fields: [roomId], references: [id])
-  roomId        Int     @unique @map("room_id")
-  isAir         isAir   @default(FAN)
-  isWaterHeater Boolean @default(false)
-  isFurniture   Boolean @default(false)
-  isTable       Boolean @default(false)
-  isSink        Boolean @default(false)
+  isAir         IsAir   @default(FAN) @map("is_air")
+  isWaterHeater Boolean @default(false) @map("is_waterheater")
+  isFurniture   Boolean @default(false) @map("is_furniture")
+  isTable       Boolean @default(false) @map("is_table")
+  isSink        Boolean @default(false) @map("is_sink")
+
+  // 1-1
+  room   Room @relation(fields: [roomId], references: [id])
+  roomId Int  @unique @map("room_id")
 
   @@map("room_facilities")
 }
 
-enum isAir {
+enum IsAir {
   FAN
   AIRCONDITION
+
+  @@map("is_air")
 }
 
 model DormFacilities {

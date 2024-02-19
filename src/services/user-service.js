@@ -7,6 +7,12 @@ exports.findUserByEmail = (email) =>
     },
   });
 
-exports.findUserById = (id) => prisma.user.findUnique({ where: { id } });
+exports.findUserById = (id) =>
+  prisma.user.findUnique({
+    where: { id },
+    include: {
+      dorms: true,
+    },
+  });
 
 exports.createUser = (data) => prisma.user.create({ data });

@@ -35,9 +35,9 @@ RESSPONSE
 500
 
 //------------------------------//
-//     Create Vacant Room       //
+//     Create Room              //
 //------------------------------//
-POST        /dorm       create a post
+POST        /create-room       create a Room for rent
 HEADER
     AUTHORIZATION   Bearer [JWT]    check role, get dormId
 REQUEST.BODY

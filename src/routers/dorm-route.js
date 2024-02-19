@@ -7,8 +7,13 @@ const router = express.Router();
 router.post(
   "/create-room",
   authenticate,
-  dormController.checkDormOwner,
+  dormController.checkRoleDorm,
   dormController.createRoom
 );
+
+router.get("/me", authenticate);
+
+router.post("/register", authenticate, dormController.registerDorm);
+router.get("/get-vacant-dorm", dormController.getAllVacantDorm);
 
 module.exports = router;
