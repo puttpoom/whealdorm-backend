@@ -75,7 +75,7 @@ model Dorm {
   electricalUnit  Decimal  @map("electrical_unit") @db.Decimal(4, 2)
   waterUnit       Decimal  @map("water_unit") @db.Decimal(4, 2)
   totalVacantRoom Int      @default(0) @map("total_vacant_room")
-  IsVerify        IsVerify @default(PEDNING)
+  isVerify        IsVerify @default(PEDNING) @map("is_verify")
 
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique @map("user_id")
@@ -83,7 +83,7 @@ model Dorm {
   // 1-M
   room           Room[]
   //1-1
-  DormFacilities DormFacilities?
+  dormFacilities DormFacilities?
 
   @@map("dorms")
 }

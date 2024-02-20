@@ -1,6 +1,16 @@
 const prisma = require("../models/prisma");
 
-exports.registerDorm = (data) => prisma.dorm.create({ data });
+exports.registerDorm = (data, dormFacilities) =>
+  prisma.dorm.create({
+    data: {
+      ...data,
+      dormFacilities: {
+        create: {
+          ...dormFacilities,
+        },
+      },
+    },
+  });
 
 exports.findDormUserByUserId = (userId) =>
   prisma.dorm.findFirst({

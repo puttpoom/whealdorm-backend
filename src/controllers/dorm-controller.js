@@ -13,8 +13,9 @@ const createError = require("../untills/create-error");
 //NOTE: req.user from authenticate.js
 
 exports.registerDorm = catchError(async (req, res, next) => {
-  const data = { ...req.body, userId: req.user.id };
-  const result = await registerDorm(data);
+  const data = { ...req.body.dorm, userId: req.user.id };
+  const dormFacilities = { ...req.body.dormFacilities };
+  const result = await registerDorm(data, dormFacilities);
   console.log(result);
   res.status(200).json({ message: "register drom successfully" });
 });
