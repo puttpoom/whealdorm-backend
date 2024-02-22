@@ -69,7 +69,7 @@ model Dorm {
   dormName        String   @map("dorm_name")
   phone           String
   dormImages      String?  @map("dorm_images")
-  latlong         String?
+  latLong         String?  @map("lat_long")
   location        String?
   distance        String
   electricalUnit  Decimal  @map("electrical_unit") @db.Decimal(4, 2)

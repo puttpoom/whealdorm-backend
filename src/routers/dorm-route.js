@@ -7,6 +7,13 @@ const {
 
 const router = express.Router();
 
+router.get(
+  "/maps/:targetDormId",
+  validateTargetDormId,
+  dormController.checkExitsDorm,
+  dormController.googleMapsLatLongDorm
+);
+
 //fetch dorm when Click DormCard
 router.get(
   "/room/:targetDormId",

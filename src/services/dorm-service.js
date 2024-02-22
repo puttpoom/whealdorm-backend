@@ -15,7 +15,10 @@ exports.registerDorm = (data, dormFacilities) =>
 exports.findDormUserByUserId = (userId) =>
   prisma.dorm.findFirst({
     where: { userId },
-    include: { room: true },
+    include: {
+      dormFacilities: true,
+      room: true,
+    },
   });
 
 exports.createRoom = (data, roomFacilities) =>
@@ -42,4 +45,10 @@ exports.getAllVacantDorm = () =>
     include: {
       room: true,
     },
+  });
+
+exports.getLatLongDormByUserId = (userId) =>
+  prisma.dorm.findFirst({
+    where: { userId },
+    select: { latLong: true },
   });
