@@ -50,9 +50,9 @@ model Appointment {
   createdAt         DateTime          @default(now())
   appointmentStatus AppointmentStatus @default(PEDNING) @map("appointment_status")
 
-  User   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
   userId Int  @map("user_id")
-  Room   Room @relation(fields: [roomId], references: [id])
+  room   Room @relation(fields: [roomId], references: [id])
   roomId Int  @map("room_id")
 
   @@map("appointments")
@@ -105,7 +105,7 @@ model Room {
   roomFacilities RoomFacilities?
 
   // M-1
-  Dorm      Dorm     @relation(fields: [dormId], references: [id])
+  dorm      Dorm     @relation(fields: [dormId], references: [id])
   dormId    Int      @map("dorm_id")
   createdAt DateTime @default(now()) @map("created_at")
 

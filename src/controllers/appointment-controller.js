@@ -1,4 +1,8 @@
-const { getRoomByRoomId } = require("../services/appointment-service");
+const {
+  getRoomByRoomId,
+  createAppointmentByUser,
+  getAllAppointmentsByDormId,
+} = require("../services/appointment-service");
 const catchError = require("../untills/catch-error");
 const createError = require("../untills/create-error");
 
@@ -8,4 +12,16 @@ exports.getRoom = catchError(async (req, res, next) => {
     createError("room was not found", 404);
   }
   res.status(200).json(roomDetails);
+});
+
+exports.createAppointment = catchError(async (req, res, next) => {
+  const data = { userId: req.user.id, title: req.body };
+  console.log(data);
+  const result = await createAppointmentByUser(data);
+  res.status(200).json(result);
+});
+
+exports.getAllAppointmentsByDormId = catchError(async (req, res, next) => {
+  const result = await getAllAppointmentsByDormId(dormId);
+  res.status(200).json(result);
 });
