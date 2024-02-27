@@ -2,6 +2,7 @@ const {
   getRoomByRoomId,
   createAppointmentByUser,
   getAllAppointmentsByDormId,
+  getUserAppointmentsByUserId,
 } = require("../services/appointment-service");
 const catchError = require("../untills/catch-error");
 const createError = require("../untills/create-error");
@@ -21,10 +22,16 @@ exports.createAppointment = catchError(async (req, res, next) => {
   };
   console.log(data);
   const result = await createAppointmentByUser(data);
-  res.status(200).json(result);
+  res.status(201).json(result);
 });
 
 exports.getAllAppointmentsByDormId = catchError(async (req, res, next) => {
   const result = await getAllAppointmentsByDormId(dormId);
+  res.status(200).json(result);
+});
+
+exports.getUserAppointments = catchError(async (req, res, next) => {
+  const userId = req.user.id;
+  const result = await getUserAppointmentsByUserId(userId);
   res.status(200).json(result);
 });

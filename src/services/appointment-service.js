@@ -33,10 +33,11 @@ exports.createAppointmentByUser = (appointmentData) =>
 exports.getAllAppointmentsByDormId = (dormId) =>
   prisma.appointment.findMany({ where: { id: dormId } });
 
-// data: {
-//     fullName: appointmentData.title.fullName,
-// phone: appointmentData.title.phone,
-// title: appointmentData.title.title,
-// appointedDate: appointmentData.title.appointedDate,
-// appointedTime: appointmentData.title.appointedTime,
-//   },
+exports.getUserAppointmentsByUserId = (userId) =>
+  prisma.appointment.findMany({
+    where: { userId },
+    include: { room: true },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });

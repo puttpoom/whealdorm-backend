@@ -13,6 +13,12 @@ router.get(
   appointmentController.getRoom
 );
 
+router.get(
+  "/:targetUserId",
+  authenticate,
+  appointmentController.getUserAppointments
+);
+
 router.post("", authenticate, appointmentController.createAppointment);
 
 module.exports = router;
