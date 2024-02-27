@@ -11,6 +11,7 @@ exports.getRoomByRoomId = (roomId) =>
           isVerify: true,
           location: true,
           distance: true,
+          latLong: true,
         },
       },
     },
