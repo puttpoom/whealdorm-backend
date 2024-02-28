@@ -36,7 +36,7 @@ exports.getAllAppointmentsByDormId = (dormId) =>
 exports.getUserAppointmentsByUserId = (userId) =>
   prisma.appointment.findMany({
     where: { userId },
-    include: { room: true },
+    include: { room: { include: { roomFacilities: true } } },
     orderBy: {
       createdAt: "asc",
     },
