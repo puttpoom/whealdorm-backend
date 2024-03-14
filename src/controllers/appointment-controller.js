@@ -3,6 +3,7 @@ const {
   createAppointmentByUser,
   getAllAppointmentsByDormId,
   getUserAppointmentsByUserId,
+  deleteAppointmentByUser,
 } = require("../services/appointment-service");
 const catchError = require("../untills/catch-error");
 const createError = require("../untills/create-error");
@@ -49,4 +50,10 @@ exports.getUserAppointments = catchError(async (req, res, next) => {
   const userId = req.user.id;
   const result = await getUserAppointmentsByUserId(userId);
   res.status(200).json(result);
+});
+
+exports.deleteAppointment = catchError(async (req, res, next) => {
+  const appointmentId = +req.params.appointmentId;
+  await deleteAppointmentByUser(appointmentId);
+  res.status(204).json({ message: "appointment was deleted" });
 });

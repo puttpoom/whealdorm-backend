@@ -25,6 +25,12 @@ router.get(
   appointmentController.getAllAppointmentsByDormId
 );
 
+router.delete(
+  "/:appointmentId",
+  authenticate,
+  appointmentController.deleteAppointment
+);
+
 router.post("", authenticate, appointmentController.createAppointment);
 
 module.exports = router;

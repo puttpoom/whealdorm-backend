@@ -46,3 +46,6 @@ exports.getUserAppointmentsByUserId = (userId) =>
 
 exports.getDormAppointmentByDormId = (dormId) =>
   prisma.appointment.findMany({ where: { roomId: { connect: { dormId } } } });
+
+exports.deleteAppointmentByUser = (appointmentId) =>
+  prisma.appointment.delete({ where: { id: appointmentId } });
