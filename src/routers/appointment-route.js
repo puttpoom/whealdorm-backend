@@ -19,6 +19,12 @@ router.get(
   appointmentController.getUserAppointments
 );
 
+router.get(
+  "/dorm/appointments",
+  authenticate,
+  appointmentController.getAllAppointmentsByDormId
+);
+
 router.post("", authenticate, appointmentController.createAppointment);
 
 module.exports = router;

@@ -7,6 +7,7 @@ exports.getRoomByRoomId = (roomId) =>
       roomFacilities: true,
       dorm: {
         select: {
+          id: true,
           dormName: true,
           isVerify: true,
           location: true,
@@ -20,13 +21,14 @@ exports.getRoomByRoomId = (roomId) =>
 exports.createAppointmentByUser = (appointmentData) =>
   prisma.appointment.create({
     data: {
-      room: { connect: { id: appointmentData.title.roomId } },
+      title: appointmentData.title,
+      phone: appointmentData.phone,
+      fullName: appointmentData.fullName,
+      appointedDate: appointmentData.appointedDate,
+      appointedTime: appointmentData.appointedTime,
       user: { connect: { id: appointmentData.userId } },
-      fullName: appointmentData.title.fullName,
-      phone: appointmentData.title.phone,
-      title: appointmentData.title.title,
-      appointedDate: appointmentData.title.appointedDate,
-      appointedTime: appointmentData.title.appointedTime,
+      room: { connect: { id: appointmentData.roomId } },
+      dorm: { connect: { id: appointmentData.dormId } },
     },
   });
 
@@ -41,3 +43,6 @@ exports.getUserAppointmentsByUserId = (userId) =>
       createdAt: "asc",
     },
   });
+
+exports.getDormAppointmentByDormId = (dormId) =>
+  prisma.appointment.findMany({ where: { roomId: { connect: { dormId } } } });

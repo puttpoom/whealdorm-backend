@@ -42,18 +42,21 @@ enum AppointmentStatus {
 
 model Appointment {
   id                Int               @id @default(autoincrement())
-  fullName          String            @map("full_name")
-  phone             String
   title             String
+  phone             String
+  fullName          String            @map("full_name")
   appointedDate     String            @map("appointed_date")
   appointedTime     String            @map("appointed_time")
-  createdAt         DateTime          @default(now())
+  createdAt         DateTime          @default(now()) @map("created_at")
   appointmentStatus AppointmentStatus @default(PEDNING) @map("appointment_status")
 
   user   User @relation(fields: [userId], references: [id])
   userId Int  @map("user_id")
   room   Room @relation(fields: [roomId], references: [id])
   roomId Int  @map("room_id")
+
+  dorm   Dorm @relation(fields: [dormId], references: [id])
+  dormId Int  @map("dorm_id")
 
   @@map("appointments")
 }
@@ -84,6 +87,7 @@ model Dorm {
   room           Room[]
   //1-1
   dormFacilities DormFacilities?
+  Appointment    Appointment[]
 
   @@map("dorms")
 }

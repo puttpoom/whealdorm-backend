@@ -16,9 +16,24 @@ exports.getRoom = catchError(async (req, res, next) => {
 });
 
 exports.createAppointment = catchError(async (req, res, next) => {
+  const {
+    title,
+    fullName,
+    roomId,
+    phone,
+    appointedDate,
+    appointedTime,
+    dormId,
+  } = req.body;
   const data = {
     userId: req.user.id,
-    title: req.body,
+    title,
+    fullName,
+    roomId,
+    phone,
+    appointedDate,
+    appointedTime,
+    dormId,
   };
   console.log(data);
   const result = await createAppointmentByUser(data);
