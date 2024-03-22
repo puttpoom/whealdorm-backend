@@ -16,7 +16,8 @@ const authenticate = catchError(async (req, res, next) => {
     createError("user was not found", 401);
   }
 
-  const dorm = await delete user.password;
+  const dorm = delete user.password;
+  req.dorm = dorm;
   req.user = user; //! ยัดกลับเพื่อไปให้ middle ware ตัวที่ next ใช้ต่อ
   next();
 });

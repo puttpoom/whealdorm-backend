@@ -26,6 +26,7 @@ exports.createAppointment = catchError(async (req, res, next) => {
     appointedTime,
     dormId,
   } = req.body;
+
   const data = {
     userId: req.user.id,
     title,
@@ -36,12 +37,14 @@ exports.createAppointment = catchError(async (req, res, next) => {
     appointedTime,
     dormId,
   };
+
   console.log(data);
   const result = await createAppointmentByUser(data);
   res.status(201).json(result);
 });
 
 exports.getAllAppointmentsByDormId = catchError(async (req, res, next) => {
+  const { dormId } = req.body;
   const result = await getAllAppointmentsByDormId(dormId);
   res.status(200).json(result);
 });
