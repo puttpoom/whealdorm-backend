@@ -49,3 +49,11 @@ exports.getDormAppointmentByDormId = (dormId) =>
 
 exports.deleteAppointmentByUser = (appointmentId) =>
   prisma.appointment.delete({ where: { id: appointmentId } });
+
+exports.updateAppointmentByDorm = (appointmentId, appointmentStatus) =>
+  prisma.appointment.update({
+    where: { id: appointmentId },
+    data: {
+      appointmentStatus,
+    },
+  });
