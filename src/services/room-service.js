@@ -15,8 +15,9 @@ exports.getAllVacantRoomByDormID = (dormId) =>
       dormFacilities: true,
     },
   });
-//   prisma.room.findMany({
-//     where: { AND: [{ roomStatus: { equals: "VACANT" } }, { dormId }] },
-//   });
 
-//   , { roomStatus: { equals: "VACANT" } }
+exports.getAllVacantRoom = () =>
+  prisma.room.findMany({
+    where: { roomStatus: { equals: "VACANT" } },
+    include: { dorm: { select: { dormName: true, id: true } } },
+  });

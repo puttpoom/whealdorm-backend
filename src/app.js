@@ -13,12 +13,14 @@ app.use(express.json());
 //router
 const authRoute = require("./routers/auth-route");
 const dormRoute = require("./routers/dorm-route");
+const roomRoute = require("./routers/room-route");
 const appointmentRoute = require("./routers/appointment-route");
 
 //config rote
 // app.use("/");
 app.use("/auth", authRoute);
 app.use("/dorm", dormRoute);
+app.use("/room", roomRoute);
 app.use("/appointment", appointmentRoute);
 
 app.use(notFound);
