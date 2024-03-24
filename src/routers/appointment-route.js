@@ -31,6 +31,12 @@ router.delete(
   appointmentController.deleteAppointment
 );
 
+router.patch(
+  "/:appointmentId",
+  authenticate,
+  appointmentController.updateAppointment
+);
+
 router.post("", authenticate, appointmentController.createAppointment);
 
 module.exports = router;
