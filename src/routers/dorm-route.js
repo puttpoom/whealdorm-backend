@@ -39,10 +39,4 @@ router.post("/register", authenticate, dormController.registerDorm);
 //fetch vacant dorm on HomePage
 router.get("/get-vacant-dorm", dormController.getAllVacantDorm);
 
-// router.get(
-//   "/appointments",
-//   authenticate,
-//   dormController.getAllAppointmentsByDormId
-// );
-
 module.exports = router;

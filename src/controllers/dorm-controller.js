@@ -4,7 +4,7 @@ const {
   registerDorm,
   updateTotalRoom,
   getAllVacantDorm,
-  getLatLongDormByUserId,
+  getLatLongDormByDormId,
 } = require("../services/dorm-service");
 
 const { getAllVacantRoomByDormID } = require("../services/room-service");
@@ -14,7 +14,7 @@ const createError = require("../untills/create-error");
 //NOTE: req.user from authenticate.js
 
 exports.googleMapsLatLongDorm = catchError(async (req, res, next) => {
-  const latLong = await getLatLongDormByUserId(+req.params.targetDormId);
+  const latLong = await getLatLongDormByDormId(+req.params.targetDormId);
   res.status(200).json(latLong);
 });
 

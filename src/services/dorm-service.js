@@ -47,8 +47,8 @@ exports.getAllVacantDorm = () =>
     },
   });
 
-exports.getLatLongDormByUserId = (userId) =>
+exports.getLatLongDormByDormId = (dormId) =>
   prisma.dorm.findFirst({
-    where: { userId },
+    where: { id: dormId },
     select: { latLong: true },
   });
