@@ -5,6 +5,9 @@ exports.findUserByEmail = (email) =>
     where: {
       email,
     },
+    include: {
+      dorms: true,
+    },
   });
 
 exports.findUserById = (id) =>
