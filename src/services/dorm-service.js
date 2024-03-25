@@ -21,6 +21,15 @@ exports.findDormUserByUserId = (userId) =>
     },
   });
 
+exports.findDormUserByDormId = (dormId) =>
+  prisma.dorm.findFirst({
+    where: { id: dormId },
+    include: {
+      dormFacilities: true,
+      room: true,
+    },
+  });
+
 exports.createRoom = (data, roomFacilities) =>
   prisma.room.create({
     data: {

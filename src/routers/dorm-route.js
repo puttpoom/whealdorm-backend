@@ -5,6 +5,8 @@ const {
   validateTargetDormId,
 } = require("../middlewares/validators/validate-dorm");
 
+const upload = require("../middlewares/upload");
+
 const router = express.Router();
 
 router.get(
@@ -34,7 +36,12 @@ router.post(
 router.get("/me", authenticate);
 
 //register dorm
-router.post("/register", authenticate, dormController.registerDorm);
+router.post(
+  "/register",
+  authenticate,
+  upload.single("image"),
+  dormController.registerDorm
+);
 
 //fetch vacant dorm on HomePage
 router.get("/get-vacant-dorm", dormController.getAllVacantDorm);
