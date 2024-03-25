@@ -9,6 +9,7 @@ const {
 
 const { getAllVacantRoomByDormID } = require("../services/room-service");
 const catchError = require("../untills/catch-error");
+const uploadService = require("../services/upload-service");
 const createError = require("../untills/create-error");
 
 //NOTE: req.user from authenticate.js
@@ -20,6 +21,10 @@ exports.googleMapsLatLongDorm = catchError(async (req, res, next) => {
 
 exports.registerDorm = catchError(async (req, res, next) => {
   const data = { ...req.body.dorm, userId: req.user.id };
+  if (req.file) {
+    data.image = await uploadService.upload(req.file.path);
+  }
+
   const dormFacilities = { ...req.body.dormFacilities };
   const result = await registerDorm(data, dormFacilities);
   console.log(result);
