@@ -1,6 +1,6 @@
 const {
   createRoom,
-  findDormUserByUserId,
+  findDormUserByDormId,
   registerDorm,
   updateTotalRoom,
   getAllVacantDorm,
@@ -59,7 +59,18 @@ exports.getAllVacantDorm = catchError(async (req, res, next) => {
 });
 
 exports.checkExitsDorm = catchError(async (req, res, next) => {
-  const exitsDorm = await findDormUserByUserId(+req.params.targetDormId);
+  const exitsDorm = await findDormUserByDormId(+req.params.targetDormId);
+  if (!exitsDorm) {
+    createError("dorm was not found", 404);
+  }
+
+  delete exitsDorm.password;
+  req.targetDormId = exitsDorm;
+  next();
+});
+
+exports.checkExitsRoom = catchError(async (req, res, next) => {
+  const exitsRoom = await findDormUserByDormId(+req.params.targetDormId);
   if (!exitsDorm) {
     createError("dorm was not found", 404);
   }
