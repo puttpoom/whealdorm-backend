@@ -3,6 +3,7 @@ const hashService = require("../services/hash-service");
 const createError = require("../untills/create-error");
 const catchError = require("../untills/catch-error");
 const jwtService = require("../services/jwt-service");
+const e = require("express");
 
 exports.register = catchError(async (req, res, next) => {
   const existUser = await userService.findUserByEmail(req.body.email);
@@ -48,39 +49,38 @@ exports.login = catchError(async (req, res, next) => {
   res.status(200).json({ accessToken, user: existsUser });
 });
 
+// {
+//     "id": "106729908573215700956",
+//     "email": "poom.bm@gmail.com",
+//     "verified_email": true,
+//     "name": "Poom Putthiphoom",
+//     "given_name": "Poom",
+//     "family_name": "Putthiphoom",
+//     "picture": "https://lh3.googleusercontent.com/a/ACg8ocLaxqkDZLzx-ULptzEbPHYqFjAiIbPY8EPxJynL8EeGug=s96-c",
+//     "locale": "th"
+// }
+
+// {
+//     "access_token": "ya29.a0Ad52N3-lAZS5GCDHvwCJFVuRT-slIFwTsfVkdoDGNpYN3S8JzYexpbiDnJfjdgjkVNRWwF80gtYNemM7wcKpVXUB6meLwziOR6Wob55fmTDdNXynzb5DXdOnqy2JPKD0cxb0BT9vf8LXdmSYwkl0FFfAQ4vb4zyrtUIaCgYKATsSARMSFQHGX2Mi07WEzC6nycqUNby1gkFdtA0170",
+//     "token_type": "Bearer",
+//     "expires_in": 3599,
+//     "scope": "email profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid",
+//     "authuser": "0",
+//     "prompt": "none"
+// }
+
 exports.googleLogin = catchError(async (req, res, next) => {
-  const { credential } = req.body;
+  console.log(req.body, "decoded google login");
+  const { email, name, given_name, family_name } = req.body;
 
-  const userCredentialGoogle = jwtService.verify(credential);
-  const userData = await userService.findUserByEmail(
-    userCredentialGoogle.email
-  );
-
-  if (!userData) {
-    createError("User not found", 404);
-  }
-
-  const payload = { userId: userData.id, role: userData.role };
-  const accessToken = jwtService.sign(payload);
-
-  delete userData?.password;
-
-  res.status(200).json({ accessToken, user: userData });
-});
-
-exports.googleRegister = catchError(async (req, res, next) => {
-  const { credential } = req.body;
-
-  const userCredentialGoogle = jwtService.verify(credential);
-  const userData = await userService.findUserByEmail(
-    userCredentialGoogle.email
-  );
+  const userData = await userService.findUserByEmail(email);
+  // console.log(userData);
 
   if (!userData) {
     const newUser = await userService.createUserGoogle({
-      email: userCredentialGoogle.email,
-      firstName: userCredentialGoogle.given_name,
-      lastName: userCredentialGoogle.family_name,
+      email,
+      firstName: given_name,
+      lastName: family_name,
       role: "USER",
     });
 
@@ -91,11 +91,13 @@ exports.googleRegister = catchError(async (req, res, next) => {
 
     res.status(201).json({ accessToken, newUser });
   } else {
-    createError("Email already in use", 400);
-    res.status(404).json({ message: "Email already in use" });
-  }
+    const payload = { userId: userData.id, role: userData.role };
+    const accessToken = jwtService.sign(payload);
 
-  next();
+    delete userData?.password;
+
+    res.status(200).json({ accessToken, user: userData });
+  }
 });
 
 exports.getMe = (req, res, next) => res.status(200).json({ user: req.user });
