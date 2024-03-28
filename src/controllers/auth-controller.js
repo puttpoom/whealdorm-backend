@@ -48,4 +48,54 @@ exports.login = catchError(async (req, res, next) => {
   res.status(200).json({ accessToken, user: existsUser });
 });
 
+exports.googleLogin = catchError(async (req, res, next) => {
+  const { credential } = req.body;
+
+  const userCredentialGoogle = jwtService.verify(credential);
+  const userData = await userService.findUserByEmail(
+    userCredentialGoogle.email
+  );
+
+  if (!userData) {
+    createError("User not found", 404);
+  }
+
+  const payload = { userId: userData.id, role: userData.role };
+  const accessToken = jwtService.sign(payload);
+
+  delete userData?.password;
+
+  res.status(200).json({ accessToken, user: userData });
+});
+
+exports.googleRegister = catchError(async (req, res, next) => {
+  const { credential } = req.body;
+
+  const userCredentialGoogle = jwtService.verify(credential);
+  const userData = await userService.findUserByEmail(
+    userCredentialGoogle.email
+  );
+
+  if (!userData) {
+    const newUser = await userService.createUserGoogle({
+      email: userCredentialGoogle.email,
+      firstName: userCredentialGoogle.given_name,
+      lastName: userCredentialGoogle.family_name,
+      role: "USER",
+    });
+
+    const payload = { userId: newUser.id, role: newUser.role };
+    const accessToken = jwtService.sign(payload);
+
+    delete newUser?.password;
+
+    res.status(201).json({ accessToken, newUser });
+  } else {
+    createError("Email already in use", 400);
+    res.status(404).json({ message: "Email already in use" });
+  }
+
+  next();
+});
+
 exports.getMe = (req, res, next) => res.status(200).json({ user: req.user });

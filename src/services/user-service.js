@@ -19,3 +19,5 @@ exports.findUserById = (id) =>
   });
 
 exports.createUser = (data) => prisma.user.create({ data });
+
+exports.createUserGoogle = (data) => prisma.user.create({ data });
