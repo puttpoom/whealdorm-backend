@@ -5,6 +5,7 @@ const {
   updateTotalRoom,
   getAllVacantDorm,
   getLatLongDormByDormId,
+  findDormUserByUserId,
 } = require("../services/dorm-service");
 
 const { getAllVacantRoomByDormID } = require("../services/room-service");
