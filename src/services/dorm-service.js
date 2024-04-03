@@ -1,9 +1,9 @@
 const prisma = require("../models/prisma");
 
-exports.registerDorm = (data, dormFacilities) =>
+exports.registerDorm = (dorm, dormFacilities) =>
   prisma.dorm.create({
     data: {
-      ...data,
+      ...dorm,
       dormFacilities: {
         create: {
           ...dormFacilities,

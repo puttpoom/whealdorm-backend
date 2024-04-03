@@ -22,11 +22,14 @@ exports.googleMapsLatLongDorm = catchError(async (req, res, next) => {
 
 exports.registerDorm = catchError(async (req, res, next) => {
   const data = { ...req.body.dorm, userId: req.user.id };
+  console.log(req.body, "dataasdsad");
+
   if (req.file) {
     data.image = await uploadService.upload(req.file.path);
   }
 
   const dormFacilities = { ...req.body.dormFacilities };
+
   const result = await registerDorm(data, dormFacilities);
   console.log(result);
   res.status(200).json(result);

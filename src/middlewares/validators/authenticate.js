@@ -16,6 +16,7 @@ const authenticate = catchError(async (req, res, next) => {
     createError("user was not found", 401);
   }
 
+  delete user.password;
   console.log(user, "user");
   const dorm = delete user.password;
   // console.log({ dorm }, "dorm");
