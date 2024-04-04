@@ -20,13 +20,19 @@ router.get(
 );
 
 router.get(
-  "/dorm/appointments",
+  "/dorm/:dormId",
   authenticate,
   appointmentController.getAllAppointmentsByDormId
 );
 
 router.delete(
-  "/:appointmentId",
+  "/user/:appointmentId",
+  authenticate,
+  appointmentController.deleteAppointment
+);
+
+router.delete(
+  "/dorm/:appointmentId",
   authenticate,
   appointmentController.deleteAppointment
 );

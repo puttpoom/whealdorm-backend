@@ -18,8 +18,8 @@ const authenticate = catchError(async (req, res, next) => {
 
   delete user.password;
   console.log(user, "user");
-  const dorm = delete user.password;
-  // console.log({ dorm }, "dorm");
+  const dorm = user.dorms;
+  console.log(dorm, "dormmmmmmmmmmm");
 
   req.dorm = dorm;
   req.user = user; //! ยัดกลับเพื่อไปให้ middle ware ตัวที่ next ใช้ต่อ

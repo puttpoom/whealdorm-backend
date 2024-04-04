@@ -45,8 +45,9 @@ exports.createAppointment = catchError(async (req, res, next) => {
 });
 
 exports.getAllAppointmentsByDormId = catchError(async (req, res, next) => {
-  const { dormId } = req.body;
-  const result = await getAllAppointmentsByDormId(dormId);
+  const { id } = req?.dorm;
+  console.log(id, "iddddddddddd");
+  const result = await getAllAppointmentsByDormId(id);
   res.status(200).json(result);
 });
 

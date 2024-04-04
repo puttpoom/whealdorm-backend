@@ -33,7 +33,7 @@ exports.createAppointmentByUser = (appointmentData) =>
   });
 
 exports.getAllAppointmentsByDormId = (dormId) =>
-  prisma.appointment.findMany({ where: { id: dormId } });
+  prisma.appointment.findMany({ where: { dormId } });
 
 exports.getUserAppointmentsByUserId = (userId) =>
   prisma.appointment.findMany({
